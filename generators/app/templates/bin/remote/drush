@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+drush_args=$@
+
+service_id=$(docker ps | grep vagrant_php | awk '{print $1}')
+
+docker exec -it $service_id drush-portal $drush_args

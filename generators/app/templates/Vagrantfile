@@ -1,0 +1,37 @@
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "debian/jessie64"
+  config.vm.network "private_network", ip: "192.168.100.47"
+
+  config.vm.hostname = '<%= vmHostname %>'
+
+  config.vm.provider :virtualbox do |vb|
+    vb.name = "<%= machineName %>"
+    vb.memory = 2048
+  end
+
+  config.ssh.forward_agent = true
+
+  config.vm.provision "shell",
+    inline: "apt-get install -y zsh && sudo chsh -s /usr/bin/zsh vagrant"
+
+  config.vm.provision "shell",
+    inline: "[ -e /home/vagrant/.zshrc ] && echo '' || ln -s /vagrant/zsh/.zshrc /home/vagrant/.zshrc"
+
+  config.vm.provision "shell",
+    inline: "[ -e /usr/local/share/zsh/site-functions/prompt_pure_setup ] && echo '' || ln -s /vagrant/zsh/pure.zsh /usr/local/share/zsh/site-functions/prompt_pure_setup"
+
+  config.vm.provision "shell",
+    inline: "[ -e /usr/local/share/zsh/site-functions/async ] && echo '' || ln -s /vagrant/zsh/async.zsh /usr/local/share/zsh/site-functions/async"
+
+  if ENV['GITHUB_OAUTH_TOKEN']
+    config.vm.provision "shell",
+      inline: "sudo sed -i '/^GITHUB_OAUTH_TOKEN=/d' /etc/environment  && sudo bash -c 'echo GITHUB_OAUTH_TOKEN=#{ENV['GITHUB_OAUTH_TOKEN']} >> /etc/environment'"
+  end
+
+  config.vm.provision :docker
+  config.vm.provision :docker_compose, yml: "/vagrant/docker-compose.yml", run: "always", compose_version: "1.7.1"
+
+  config.vm.synced_folder ".", "/vagrant", type: "nfs"
+  config.vm.synced_folder "./src", "/mnt/code", type: "rsync", rsync__exclude: [".git/", "src/vendor"]
+end

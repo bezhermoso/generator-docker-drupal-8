@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+/root/.composer/vendor/bin/drupal --root=/var/www/web $@
+
+

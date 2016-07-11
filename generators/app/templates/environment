@@ -1,0 +1,4 @@
+MYSQL_USER=activelamp
+MYSQL_ROOT_PASSWORD=root
+MYSQL_PASSWORD=activelamp
+MYSQL_DATABASE=activelamp

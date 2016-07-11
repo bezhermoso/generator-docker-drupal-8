@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+cmd="docker-compose -f /vagrant/docker-compose.yml  run --no-deps --rm server drush-portal $@"
+vagrant ssh -c "$cmd"

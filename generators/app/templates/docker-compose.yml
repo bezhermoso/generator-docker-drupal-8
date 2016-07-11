@@ -1,0 +1,37 @@
+version: '2'
+services:
+  server:
+    build:
+      context: ./src
+      args:
+        github_oauth_token: ${GITHUB_OAUTH_TOKEN}
+    volumes:
+      - <%= mountPath %>:/var/www
+      - composer-cache:/root/.composer/cache
+    env_file: environment
+    links:
+      - mysql:mysql
+    ports:
+      - 80:80
+
+  #installer:
+  #  image: 'alcom-php'
+  #  volumes:
+  #    - code:/mnt/code
+  #    - composer-cache:/root/.composer/cache
+  #  environment:
+  #    - PHP_OPTIONS='-d sendmail_path=/bin/true'
+  #  links:
+  #    - php:php
+
+  mysql:
+    image: 'mysql:5.7.9'
+    env_file: environment
+    ports:
+      - 3306:3306
+    volumes:
+      - database:/var/lib/mysql
+
+volumes:
+  database: {}
+  composer-cache: {}

@@ -1,0 +1,59 @@
+name: '<%= installationProfile %>'
+type: profile
+description: '<%= installationProfile %> profile'
+core: 8.x
+
+dependencies:
+  - admin_toolbar
+  - automated_cron
+  - block
+  - block_content
+  - breakpoint
+  - ckeditor
+  - color
+  - comment
+  - config
+  - contact
+  - contextual
+  - datetime
+  - dblog
+  - ds
+  - dynamic_page_cache
+  - editor
+  - field
+  - field_ui
+  - file
+  - filter
+  - help
+  - history
+  - image
+  - link
+  - menu_link_content
+  - menu_ui
+  - node
+  - options
+  - page_cache
+  - page_manager
+  - panels
+  - path
+  - pathauto
+  - quickedit
+  - rdf
+  - redirect
+  - search
+  - shortcut
+  - system
+  - taxonomy
+  - text
+  - toolbar
+  - tour
+  - update
+  - user
+  - views
+  - views_ui
+
+themes:
+  - stable
+  - classy
+  - bartik
+  - seven

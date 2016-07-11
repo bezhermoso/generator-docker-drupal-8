@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+echo "Dry-run..." 
+
+args=$@
+
+diffs="$(vagrant ssh -- rsync --dry-run --itemize-changes $args | grep '^[><ch.][dfLDS]\|\*deleting')"
+
+if [ -z "$diffs" ]; then
+  echo "Nothing to sync."
+  exit 0
+fi
+
+echo "These are the differences detected during dry-run. You might lose work.  Please review before proceeding:"
+echo "$diffs"
+echo ""
+read -p "Confirm? (y/N): " choice
+
+case "$choice" in
+  y|Y ) vagrant ssh -- rsync $args;;
+  * ) echo "Cancelled.";;
+esac

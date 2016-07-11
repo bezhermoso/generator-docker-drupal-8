@@ -58,7 +58,7 @@ module.exports = yeoman.Base.extend({
 
   writing: function () {
 
-    ['.gitignore', '.gitmodules', 'environment',
+    ['.gitignore', 'environment',
     ].forEach(function (f) {
       this.fs.copy(
         this.templatePath(f),
