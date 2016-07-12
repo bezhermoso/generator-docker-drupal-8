@@ -28,7 +28,7 @@ lock-file:
 	@vagrant ssh -- cat /mnt/code/composer.lock
 
 install-drupal: composer-install
-	vagrant ssh -- '[ -f /mnt/code/web/sites/default/settings.local.php ] && echo '' || cp /mnt/code/web/sites/default/settings.local.php.dist /mnt/code/web/sites/default/settings.local.php'
+	vagrant ssh -- '[ -f /mnt/code/web/sites/default/settings.local.php ] && : || cp /mnt/code/web/sites/default/settings.local.php.dist /mnt/code/web/sites/default/settings.local.php'
 	-bin/drush si <%= installationProfile %> --account-pass=admin -y
 	-bin/drush en config sync_uuids -y
 	bin/drush sync-uuids -y

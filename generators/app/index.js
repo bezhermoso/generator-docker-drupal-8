@@ -15,7 +15,7 @@ module.exports = yeoman.Base.extend({
 
     // Have Yeoman greet the user.
     this.log(yosay(
-      'Welcome to the gnarly ' + chalk.red('generator-docker-drupal-8') + ' generator!'
+      'Welcome to the gnarly ' + chalk.red('docker-drupal-8') + ' generator!'
     ));
 
     var prompts = [
@@ -150,5 +150,15 @@ module.exports = yeoman.Base.extend({
           }.bind(this));
         }
       }.bind(this));
+  },
+  end: function () {
+    this.log(yosay(chalk.green('All done!')));
+    if (this.props.useVagrant) {
+      this.log('Run ' + chalk.green('`vagrant up && make docker-restart`') + ' to boot up the virtual machine and to get Drupal 8 up and running!');
+      this.log('To sync files from your machine to the container, run ' + chalk.green('`make sync`') + '. Any changes will be synced up to the container in seconds.');
+      this.log('Run ' + chalk.green('`make sync-host`') + ' to sync changes in the container back into your machine i.e. after scaffolding code via DrupalConsole, after running `composer update`, etc.');
+    } else {
+      this.log('Run ' + chalk.green('`docker-compose build && docker-compose up -d`') + ' to get Drupal 8 up and running!');
+    }
   }
 });

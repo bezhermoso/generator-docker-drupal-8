@@ -16,13 +16,13 @@ Vagrant.configure("2") do |config|
     inline: "apt-get install -y zsh && sudo chsh -s /usr/bin/zsh vagrant"
 
   config.vm.provision "shell",
-    inline: "[ -e /home/vagrant/.zshrc ] && echo '' || ln -s /vagrant/zsh/zshrc /home/vagrant/.zshrc"
+    inline: "[ -e /home/vagrant/.zshrc ] && : || ln -s /vagrant/zsh/zshrc /home/vagrant/.zshrc"
 
   config.vm.provision "shell",
-    inline: "[ -e /usr/local/share/zsh/site-functions/prompt_pure_setup ] && echo '' || ln -s /vagrant/zsh/pure.zsh /usr/local/share/zsh/site-functions/prompt_pure_setup"
+    inline: "[ -e /usr/local/share/zsh/site-functions/prompt_pure_setup ] && : || ln -s /vagrant/zsh/pure.zsh /usr/local/share/zsh/site-functions/prompt_pure_setup"
 
   config.vm.provision "shell",
-    inline: "[ -e /usr/local/share/zsh/site-functions/async ] && echo '' || ln -s /vagrant/zsh/async.zsh /usr/local/share/zsh/site-functions/async"
+    inline: "[ -e /usr/local/share/zsh/site-functions/async ] && : || ln -s /vagrant/zsh/async.zsh /usr/local/share/zsh/site-functions/async"
 
   if ENV['GITHUB_OAUTH_TOKEN']
     config.vm.provision "shell",
