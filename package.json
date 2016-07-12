@@ -1,6 +1,6 @@
 {
   "name": "generator-docker-drupal-8",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Scaffold a Drupal 8 development environment running in Docker",
   "homepage": "http://github.com/bezhermoso/generator-docker-drupal-8",
   "author": {
