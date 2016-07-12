@@ -20,7 +20,7 @@ RUN docker-php-ext-install -j$(nproc) iconv mcrypt \
  && docker-php-ext-install -j$(nproc) gd pdo_mysql curl mbstring opcache
 
 # Install Composer & add global vendor bin dir to $PATH
-RUN curl -SS http://getcomposer.org/installer | php
+RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 RUN echo 'export PATH="$PATH:/root/.composer/vendor/bin"' >> $HOME/.bashrc
 
