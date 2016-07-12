@@ -1,7 +1,7 @@
 {
   "name": "generator-docker-drupal-8",
   "version": "0.0.0",
-  "description": "",
+  "description": "Scaffold a Drupal 8 development environment running in Docker",
   "homepage": "http://github.com/bezhermoso/generator-docker-drupal-8",
   "author": {
     "name": "Bez Hermoso",
@@ -20,6 +20,7 @@
   "dependencies": {
     "chalk": "^1.0.0",
     "merge": "^1.2.0",
+    "mv": "^2.1.1",
     "yeoman-generator": "^0.23.0",
     "yosay": "^1.0.0"
   },

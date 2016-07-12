@@ -1,4 +1,5 @@
 'use strict';
+
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
@@ -8,9 +9,8 @@ var merge = require('merge');
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
-
     this.props = {
-      mountPath: './src'
+      mountPath: './src',
     };
 
     // Have Yeoman greet the user.
@@ -98,14 +98,14 @@ module.exports = yeoman.Base.extend({
           proc.on('close', function (signal) {
             return fs.readFileAsync(this.destinationPath('src/composer.json'), 'utf8').then(JSON.parse).then(resolve);
           }.bind(this));
-        })
+        });
       }.bind(this)).then(function (composerData) {
-        composerData.require['wikimedia/composer-merge-plugin'] = "^1.3";
+        composerData.require['wikimedia/composer-merge-plugin'] = '^1.3';
         composerData.require['activelamp/sync_uuids'] = 'dev-8.x-1.x';
-        composerData.extra["merge-plugin"] = {
+        composerData.extra['merge-plugin'] = {
           include: [
-            "web/profiles/" + this.props.installationProfile + "/composer.json",
-            "web/profiles/" + this.props.installationProfile + "/modules/custom/*/composer.json"
+            'web/profiles/' + this.props.installationProfile + '/composer.json',
+            'web/profiles/' + this.props.installationProfile + '/modules/custom/*/composer.json'
           ]
         }
         return fs.writeFileAsync(
@@ -113,11 +113,22 @@ module.exports = yeoman.Base.extend({
           JSON.stringify(composerData, null, 4),
           'utf8'
         );
+      }.bind(this)).then(function() {
+        if ( this.props.installationProfile == 'standard'
+          || this.props.installationProfile == 'minimal'
+        ) {
+          return;
+        }
+        this.fs.copyTpl(
+          this.templatePath('src/web/profiles/profile/profile.info.yml'),
+          this.destinationPath('src/web/profiles/' + this.props.installationProfile + '/' + this.props.installationProfile + '.info.yml'),
+          this.props
+        );
       }.bind(this)).then(function () {
         if (this.props.useVagrant) {
           this.fs.copy(this.templatePath('src/bin'), this.destinationPath('src/bin'));
           [ 'src/bin', 'src/.platform.app.yaml', 'src/web/sites/default/settings.php',
-            'src/web/sites/default/settings.platform.php', 'src/web/sites/default/settings.local.php.dist'
+            'src/web/sites/default/settings.platform.php', 'src/web/sites/default/settings.local.php.dist', 'src/Dockerfile'
           ].forEach(function (f) {
             this.fs.copy(this.templatePath(f), this.destinationPath(f));
           }.bind(this));

@@ -6,13 +6,16 @@ var helpers = require('yeoman-test');
 describe('generator-docker-drupal-8:app', function () {
   before(function () {
     return helpers.run(path.join(__dirname, '../generators/app'))
-      .withPrompts({someAnswer: true})
+      .withPrompts({
+        installationProfile: 'my_profile',
+        useVagrant: true
+      })
       .toPromise();
   });
-
   it('creates files', function () {
     assert.file([
-      'dummyfile.txt'
+      'src/web/profiles/my_profile',
+      'Vagrantfile'
     ]);
   });
 });
