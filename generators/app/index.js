@@ -9,9 +9,8 @@ var merge = require('merge');
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
-
     this.props = merge({
-      mountPath: './src',
+      mountPath: './src'
     }, this.config.getAll());
 
     // Have Yeoman greet the user.
@@ -19,29 +18,31 @@ module.exports = yeoman.Base.extend({
       'Welcome to the gnarly ' + chalk.red('generator-docker-drupal-8') + ' generator!'
     ));
 
-    var prompts = [{
-      type: 'input',
-      name: 'installationProfile',
-      message: 'What is the name of the installation profile you wish to use?',
-      default: this.appname.toLowerCase().replace(/[^a-zA-Z0-9_]/, '_')
-    },
-    {
-      type: 'input',
-      name: 'salt',
-      message: 'Setup hash salt to use: ',
-      default: 'R@nD0M!'
-    },
-    {
-      type: 'confirm',
-      name: 'useVagrant',
-      message: 'Are you going to use a Vagrant machine your Docker host?',
-      default: true
-    }];
+    var prompts = [
+      {
+        type: 'input',
+        name: 'installationProfile',
+        message: 'What is the name of the installation profile you wish to use?',
+        default: this.appname.toLowerCase().replace(/[^a-zA-Z0-9_]/, '_')
+      },
+      {
+        type: 'input',
+        name: 'salt',
+        message: 'Setup hash salt to use: ',
+        default: 'R@nD0M!'
+      },
+      {
+        type: 'confirm',
+        name: 'useVagrant',
+        message: 'Are you going to use a Vagrant machine your Docker host?',
+        default: true
+      }
+    ];
 
     return this.prompt(prompts).then(function (props) {
       // To access props later use this.props.someAnswer;
       this.props = merge(this.props, props);
-      if (this.props.useVagrant == true) {
+      if (this.props.useVagrant === true) {
         this.props.mountPath = '/mnt/code';
         return this.prompt([
           {
@@ -66,13 +67,11 @@ module.exports = yeoman.Base.extend({
   },
 
   writing: function () {
-
-    ['.gitignore', 'environment',
-    ].forEach(function (f) {
+    ['.gitignore', 'environment'].forEach(function (f) {
       this.fs.copy(
         this.templatePath(f),
         this.destinationPath(f)
-      )
+      );
     }.bind(this));
 
     if (this.props.useVagrant) {
@@ -90,13 +89,12 @@ module.exports = yeoman.Base.extend({
   },
 
   install: function () {
-
     return fs.statAsync(this.destinationPath('src'))
-      .then(function (stat) {
+      .then(function () {
         this.log('src/ already exists. Skipping...');
         return fs.readFileAsync(this.destinationPath('src/composer.json'), 'utf8').then(JSON.parse);
       }.bind(this), function () {
-        return new Promise((resolve, reject) => {
+        return new Promise(function (resolve) {
           var proc = this.spawnCommand('composer', [
             'create-project',
             'drupal-composer/drupal-project:8.x-dev',
@@ -104,10 +102,10 @@ module.exports = yeoman.Base.extend({
             '--stability=dev',
             '--no-interaction'
           ]);
-          proc.on('close', function (signal) {
+          proc.on('close', function () {
             return fs.readFileAsync(this.destinationPath('src/composer.json'), 'utf8').then(JSON.parse).then(resolve);
           }.bind(this));
-        });
+        }.bind(this));
       }.bind(this)).then(function (composerData) {
         composerData.require['wikimedia/composer-merge-plugin'] = '^1.3';
         composerData.require['activelamp/sync_uuids'] = 'dev-8.x-1.x';
@@ -116,8 +114,7 @@ module.exports = yeoman.Base.extend({
             'web/profiles/' + this.props.installationProfile + '/composer.json',
             'web/profiles/' + this.props.installationProfile + '/modules/custom/*/composer.json'
           ]
-        }
-
+        };
         delete composerData.require['drush/drush'];
         delete composerData.require['drupal/console'];
 
@@ -136,10 +133,8 @@ module.exports = yeoman.Base.extend({
           ]);
           proc.on('close', resolve);
         }.bind(this));
-      }.bind(this)).then(function() {
-        if ( this.props.installationProfile == 'standard'
-          || this.props.installationProfile == 'minimal'
-        ) {
+      }.bind(this)).then(function () {
+        if (this.props.installationProfile === 'standard' || this.props.installationProfile === 'minimal') {
           return;
         }
         this.fs.copyTpl(
@@ -150,12 +145,10 @@ module.exports = yeoman.Base.extend({
       }.bind(this)).then(function () {
         if (this.props.useVagrant) {
           this.fs.copy(this.templatePath('src/bin'), this.destinationPath('src/bin'));
-          [ 'src/bin', 'src/.platform.app.yaml', 'src/web/sites/default/settings.php',
-            'src/web/sites/default/settings.platform.php', 'src/web/sites/default/settings.local.php.dist', 'src/Dockerfile'
-          ].forEach(function (f) {
+          ['src/bin', 'src/.platform.app.yaml', 'src/web/sites/default/settings.php', 'src/web/sites/default/settings.platform.php', 'src/web/sites/default/settings.local.php.dist', 'src/Dockerfile'].forEach(function (f) {
             this.fs.copyTpl(this.templatePath(f), this.destinationPath(f), this.props);
           }.bind(this));
         }
       }.bind(this));
-  },
+  }
 });
