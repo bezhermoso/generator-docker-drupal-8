@@ -83,8 +83,8 @@ module.exports = yeoman.Base.extend({
         );
       }.bind(this));
     } else {
-      this.fs.copy(this.templatePath('src/bin/drush-portal'), this.destinationPath('bin/drush'));
-      this.fs.copy(this.templatePath('src/bin/drupal-portal'), this.destinationPath('bin/drupal'));
+      this.fs.copyTpl(this.templatePath('src/bin/drush-portal'), this.destinationPath('bin/drush'), this.props);
+      this.fs.copyTpl(this.templatePath('src/bin/drupal-portal'), this.destinationPath('bin/drupal'), this.props);
     }
   },
 

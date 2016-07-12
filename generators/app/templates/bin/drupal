@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 
 cmd="docker-compose -f /vagrant/docker-compose.yml  run --no-deps --rm server drupal-portal $@"
+<% if(useVagrant) { %>
 vagrant ssh -c "$cmd"
+<% } else { %>
+$cmd
+<% } %>
