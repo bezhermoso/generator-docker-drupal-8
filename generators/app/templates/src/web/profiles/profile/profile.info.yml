@@ -4,7 +4,6 @@ description: '<%= installationProfile %> profile'
 core: 8.x
 
 dependencies:
-  - admin_toolbar
   - automated_cron
   - block
   - block_content
@@ -17,7 +16,6 @@ dependencies:
   - contextual
   - datetime
   - dblog
-  - ds
   - dynamic_page_cache
   - editor
   - field
@@ -33,13 +31,9 @@ dependencies:
   - node
   - options
   - page_cache
-  - page_manager
-  - panels
   - path
-  - pathauto
   - quickedit
   - rdf
-  - redirect
   - search
   - shortcut
   - system

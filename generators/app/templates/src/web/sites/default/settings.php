@@ -19,7 +19,7 @@ include __DIR__ . "/settings.platform.php";
 
 $pdate_free_access = FALSE;
 
- $drupal_hash_salt = '5vNH-JwuKOSlgzbJCL3FbXvNQNfd8Bz26SiadpFx6gE';
+$drupal_hash_salt = '<%= salt %>';
 
 $local_settings = dirname(__FILE__) . '/settings.local.php';
 
@@ -27,5 +27,5 @@ if (file_exists($local_settings)) {
     require_once($local_settings);
  }
 
-$settings['install_profile'] = 'activelamp_com';
+$settings['install_profile'] = '<%= installationProfile %>';
 $settings['hash_salt'] = $drupal_hash_salt;

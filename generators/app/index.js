@@ -9,9 +9,10 @@ var merge = require('merge');
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
-    this.props = {
+
+    this.props = merge({
       mountPath: './src',
-    };
+    }, this.config.getAll());
 
     // Have Yeoman greet the user.
     this.log(yosay(
@@ -23,6 +24,12 @@ module.exports = yeoman.Base.extend({
       name: 'installationProfile',
       message: 'What is the name of the installation profile you wish to use?',
       default: this.appname.toLowerCase().replace(/[^a-zA-Z0-9_]/, '_')
+    },
+    {
+      type: 'input',
+      name: 'salt',
+      message: 'Setup hash salt to use: ',
+      default: 'R@nD0M!'
     },
     {
       type: 'confirm',
@@ -51,6 +58,8 @@ module.exports = yeoman.Base.extend({
           }
         ]).then(function (props) {
           this.props = merge(this.props, props);
+          this.config.set(this.props);
+          this.config.save();
         }.bind(this));
       }
     }.bind(this));
@@ -108,11 +117,25 @@ module.exports = yeoman.Base.extend({
             'web/profiles/' + this.props.installationProfile + '/modules/custom/*/composer.json'
           ]
         }
+
+        delete composerData.require['drush/drush'];
+        delete composerData.require['drupal/console'];
+
         return fs.writeFileAsync(
           this.destinationPath('src/composer.json'),
           JSON.stringify(composerData, null, 4),
           'utf8'
         );
+      }.bind(this)).then(function () {
+        return new Promise(function (resolve) {
+          var proc = this.spawnCommand('composer', [
+            '--working-dir=' + this.destinationPath('src'),
+            'update',
+            '--no-interaction',
+            '--prefer-dist'
+          ]);
+          proc.on('close', resolve);
+        }.bind(this));
       }.bind(this)).then(function() {
         if ( this.props.installationProfile == 'standard'
           || this.props.installationProfile == 'minimal'
@@ -130,7 +153,7 @@ module.exports = yeoman.Base.extend({
           [ 'src/bin', 'src/.platform.app.yaml', 'src/web/sites/default/settings.php',
             'src/web/sites/default/settings.platform.php', 'src/web/sites/default/settings.local.php.dist', 'src/Dockerfile'
           ].forEach(function (f) {
-            this.fs.copy(this.templatePath(f), this.destinationPath(f));
+            this.fs.copyTpl(this.templatePath(f), this.destinationPath(f), this.props);
           }.bind(this));
         }
       }.bind(this));

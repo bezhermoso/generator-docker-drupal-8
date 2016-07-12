@@ -1,19 +1,12 @@
 <?php
 
-$dotenv = new \Dotenv\Dotenv(__DIR__);
-$dotenv->load();
-
-if (!defined('PANTHEON_ENVIRONMENT')) {
-  // Database.
-  $databases['default']['default'] = array(
-    'database' => getenv('MYSQL_DATABASE'),
-    'username' => getenv('MYSQL_USER'),
-    'password' => getenv('MYSQL_PASSWORD'),
-    'host' => getenv('MYSQL_HOST'),
-    'driver' => 'mysql',
-    'port' => 3306,
-    'prefix' => '',
-  );
-}
-
-$settings['hash_salt'] = "FOO";
+// Database.
+$databases['default']['default'] = array(
+  'database' => getenv('MYSQL_DATABASE'),
+  'username' => getenv('MYSQL_USER'),
+  'password' => getenv('MYSQL_PASSWORD'),
+  'host' => getenv('DRUPAL_MYSQL_HOST'),
+  'driver' => 'mysql',
+  'port' => 3306,
+  'prefix' => '',
+);

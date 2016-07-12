@@ -36,7 +36,7 @@ RUN [ -n $github_oauth_token ] && composer config -g github-oauth.github.com $gi
 
 # Set timezone.
 
-RUN sed -i -e "s/\/var\/www\/html/\/var\/www\/web/" /etc/apache2/apache2.conf
+RUN [ -e /etc/apache2/sites-enabled/000-default.conf ] && sed -i -e "s/\/var\/www\/html/\/var\/www\/web/" /etc/apache2/sites-enabled/000-default.conf || sed -i -e "s/\/var\/www\/html/\/var\/www\/web/" /etc/apache2/apache2.conf
 
 # Copy scripts used by pass-through bin/drush and bin/drupal
 COPY bin/drush-portal /usr/bin/drush-portal
