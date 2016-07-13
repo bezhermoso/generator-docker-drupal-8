@@ -18,8 +18,11 @@ describe('generator-docker-drupal-8:app', function () {
   });
   it('creates files', function () {
     assert.file([
-      'src/web/profiles/my_profile',
-      'Vagrantfile'
+      'src/web/profiles/my_profile/my_profile.info.yml',
+      'Vagrantfile',
+      'Makefile',
+      'src/Dockerfile',
+      'docker-compose.yml'
     ]);
   });
 });
