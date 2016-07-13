@@ -117,7 +117,7 @@ module.exports = yeoman.Base.extend({
     var msgs = [];
     if (this.props.useVagrant) {
       msgs= [
-        'Run ' + chalk.green('`vagrant up && make docker-restart`') + ' to boot up the virtual machine and to get Drupal 8 up and running!',
+        'Run ' + chalk.green('`vagrant up && make docker-restart && make init`') + ' to boot up the virtual machine and to get Drupal 8 up and running!',
         'To sync files from your machine to the container, run ' + chalk.green('`make sync`') + '. Any changes will be synced up to the container in seconds.',
         'Run ' + chalk.green('`make sync-host`') + ' to sync changes in the container back into your machine i.e. after scaffolding code via DrupalConsole, `composer update`'
       ];
