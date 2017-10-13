@@ -76,7 +76,7 @@ module.exports = yeoman.Base.extend({
 
 
   writing: function () {
-    this._copy(['.gitignore', 'environment'])
+    this._copy(['environment']);
     if (this.props.useVagrant) {
       this._copy(['Vagrantfile', 'bin', 'zsh'], null, this.props);
     } else {
